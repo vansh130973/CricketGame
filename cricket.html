@@ -10,10 +10,11 @@
 </head>
 <body>
   <h1>Bat Ball Stump Game</h1>
+
   <button onclick="
-  let computerChoice = generateComputerChoice();
-  let resultMsg = getResult('Bat', computerChoice);
-  showResult('Bat', computerChoice, resultMsg);
+    let computerChoice = generateComputerChoice();
+    let resultMsg = getResult('Bat', computerChoice);
+    showResult('Bat', computerChoice, resultMsg);
   ">Bat</button>
 
   <button onclick="
@@ -28,22 +29,36 @@
     showResult('Stump', computerChoice, resultMsg);
   ">Stump</button>
 
+  <!-- Reset Score Button -->
+  <br><br>
+  <button onclick="resetScore()">Reset Score</button>
+
   <script>
-    let score = {
-      Win:0,
-      Loss:0,
-      Tie:0,
+    // Load score from localStorage or initialize it
+    let score = JSON.parse(localStorage.getItem('score')) || {
+      Win: 0,
+      Loss: 0,
+      Tie: 0,
     };
 
+    function saveScore() {
+      localStorage.setItem('score', JSON.stringify(score));
+    }
+
+    function resetScore() {
+      score = { Win: 0, Loss: 0, Tie: 0 };
+      localStorage.removeItem('score');
+      alert('Score has been reset.');
+    }
+
     function generateComputerChoice() {
-      //This will generate random number between 0 and 3
       let randomNumber = Math.random() * 3;
       if (randomNumber > 0 && randomNumber <= 1) {
         return 'Bat';
       } else if (randomNumber > 1 && randomNumber <= 2) {
         return 'Ball';
       } else {
-        return 'Stump'
+        return 'Stump';
       }
     }
 
@@ -51,34 +66,43 @@
       if (userMove === 'Bat') {
         if (computerMove === 'Ball') {
           score.Win++;
+          saveScore();
           return 'User won.';
         } else if (computerMove === 'Bat') {
           score.Tie++;
+          saveScore();
           return `It's a tie`;
-        } else if (computerMove === 'Stump') {
+        } else {
           score.Loss++;
+          saveScore();
           return 'Computer has won';
         }
       } else if (userMove === 'Ball') {
         if (computerMove === 'Ball') {
           score.Tie++;
+          saveScore();
           return `It's a tie`;
         } else if (computerMove === 'Bat') {
           score.Loss++;
+          saveScore();
           return 'Computer has won';
-        } else if (computerMove === 'Stump') {
+        } else {
           score.Win++;
+          saveScore();
           return 'User won.';
         }
       } else {
         if (computerMove === 'Ball') {
           score.Loss++;
+          saveScore();
           return 'Computer has won';
         } else if (computerMove === 'Bat') {
           score.Win++;
+          saveScore();
           return 'User won.';
-        } else if (computerMove === 'Stump') {
+        } else {
           score.Tie++;
+          saveScore();
           return `It's a tie`;
         }
       }
@@ -87,10 +111,9 @@
     function showResult(userMove, computerMove, result) {
       alert(`You have chosen ${userMove}. Computer choice is ${computerMove}
       
-      ${result}
-      
-      Won:${score.Win}, Tie:${score.Tie}, Loss:${score.Loss}
-      `);
+${result}
+
+Won: ${score.Win}, Tie: ${score.Tie}, Loss: ${score.Loss}`);
     }
   </script>
 </body>
