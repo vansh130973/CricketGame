@@ -29,12 +29,15 @@
     showResult('Stump', computerChoice, resultMsg);
   ">Stump</button>
 
-  <!-- Reset Score Button -->
   <br><br>
   <button onclick="resetScore()">Reset Score</button>
 
+  <h3 id="user-move"></h3>
+  <h3 id="computer-move"></h3>
+  <h3 id="result"></h3>
+  <h3 id="score"></h3>
+
   <script>
-    // Load score from localStorage or initialize it
     let score = JSON.parse(localStorage.getItem('score')) || {
       Win: 0,
       Loss: 0,
@@ -48,7 +51,7 @@
     function resetScore() {
       score = { Win: 0, Loss: 0, Tie: 0 };
       localStorage.removeItem('score');
-      alert('Score has been reset.');
+      showResult('', '', '');
     }
 
     function generateComputerChoice() {
@@ -109,11 +112,10 @@
     }
 
     function showResult(userMove, computerMove, result) {
-      alert(`You have chosen ${userMove}. Computer choice is ${computerMove}
-      
-${result}
-
-Won: ${score.Win}, Tie: ${score.Tie}, Loss: ${score.Loss}`);
+      document.getElementById('user-move').innerText = userMove ? `You have chosen ${userMove}` : '';
+      document.getElementById('computer-move').innerText = computerMove ? `Computer choice is ${computerMove}` : '';
+      document.getElementById('result').innerText = result || '';
+      document.getElementById('score').innerText = `Won: ${score.Win}, Loss: ${score.Loss}, Tie: ${score.Tie}`;
     }
   </script>
 </body>
